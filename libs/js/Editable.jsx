@@ -90,15 +90,24 @@ export default class Editable extends Component {
     if(this.validation.type === "error"){
       this.setState({ valueUpdated : false});
     }else {
+      if(this.props.onSubmit) {
+        this.props.onSubmit(this.newValue);
+      }
+
       this.value = this.newValue;
       this.setEditable(false)
       this.setState({ valueUpdated : true});
     }
   }
   onCancel = () => {
+    if(this.props.onCancel) {
+      this.props.onCancel();
+    }
+
     this.setEditable(false);
     //reset validation
     this.validation = {};
+
   }
   setValueToAnchor(value, event){
     this.newValue = value;
