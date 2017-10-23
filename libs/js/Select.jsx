@@ -30,7 +30,7 @@ export default class Select extends Component {
       this.props.setValueToAnchor(undefined, e);
       return;
     }
-    this.props.setValueToAnchor(option.text, e);
+    this.props.setValueToAnchor(e.target.value, e);
   }
   onBlur(e){
     if( !this.props.showButtons ){

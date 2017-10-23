@@ -46,45 +46,26 @@ export default class Editable extends Component {
         //for internal use
         editable: false,
         valueUpdated : false,
-
       };
-      this.setInitialValue();
 
+      this.setInitialValue(props);
   }
+
   componentWillReceiveProps(nextProps){
     if(nextProps.value != this.value){
-        this.setInitialValue();
+      this.setInitialValue(nextProps);
     }
   }
-  setInitialValue = () => {
-    const { dataType, options, value } = this.props;
-    if(dataType == "select" || dataType == "checklist"){
-      if( options == null ) {
-        throw("Please specify options for "+dataType+" data type");
-      }
-      if(value && _.isEmpty(value)){
-        const option = _.find(options, {'value' : value});
-        if(option && option.text) {
-          this.value = option.text;
-          this.newValue = option.text;;
-        }else {
-          throw("No option found for specified value:"+ value)
-        }
-      }else{
-        this.value = value;
-        this.newValue = value;
-      }
 
-    }else {
-      this.value = value;
-      this.newValue = value;
-    }
+  setInitialValue(props) {
     this.validation = {};
-
+    this.value = props.value;
   }
+
   setEditable = (editable) => {
     if(!this.state.disabled) this.setState({editable});
   }
+
   onSubmit = () => {
     this.validation = this.getValidationState();
     if(this.validation.type === "error"){
@@ -99,6 +80,7 @@ export default class Editable extends Component {
       this.setState({ valueUpdated : true});
     }
   }
+
   onCancel = () => {
     if(this.props.onCancel) {
       this.props.onCancel();
@@ -109,6 +91,7 @@ export default class Editable extends Component {
     this.validation = {};
 
   }
+
   setValueToAnchor(value, event){
     this.newValue = value;
     //To trigger onInputChange event:user defined
@@ -116,25 +99,44 @@ export default class Editable extends Component {
       this.props.onInputChange(event);
     }
   }
+
   getValueForAnchor(){
-    if(this.value){
+    const { dataType, options } = this.props;
+    var value = this.value;
+
+    if(dataType == "select" || dataType == "checklist"){
+      if( options == null ) {
+        throw("Please specify options for "+dataType+" data type");
+      }
+      if(value && !_.isEmpty(value)){
+        const option = _.find(options, {'value' : value});
+        if(option && option.text) {
+          value = option.text
+        }else {
+          throw("No option found for specified value:"+ value)
+        }
+      }
+    }
+
+    if(value){
       if(this.props.display){
-        return this.props.display(this.value);
-      } else if(this.props.seperator && _.isArray(this.value)){
-        return _.join(this.value, this.props.seperator);
-      }else if(_.isArray(this.value)){
-        return _.join(this.value, ',');
-      }else if(_.isObject(this.value)){
+        return this.props.display(value);
+      } else if(this.props.seperator && _.isArray(value)){
+        return _.join(value, this.props.seperator);
+      }else if(_.isArray(value)){
+        return _.join(value, ',');
+      }else if(_.isObject(value)){
         let tmp = '';
-        _.forOwn(this.value, function(value, key) {
+        _.forOwn(value, function(value, key) {
           tmp += key +":"+ value +" ";
         } );
         return tmp;
       }
     }
-    return this.value;
 
+    return value;
   }
+
   getValidationState(){
     if(this.props.validate){
       const validate = this.props.validate(this.newValue)
