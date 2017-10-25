@@ -14,7 +14,6 @@ export default class Select extends Component {
   }
   setInitialOptions = () => {
     const options = this.props.options;
-    options.unshift({value : "select","text" : "select"});
     return options;
   }
   getValue = () =>{
@@ -26,10 +25,6 @@ export default class Select extends Component {
       return option.value ==  e.target.value;
     });
     this.setState({ value: option.text });
-    if( e.target.value == "select"){
-      this.props.setValueToAnchor(undefined, e);
-      return;
-    }
     this.props.setValueToAnchor(e.target.value, e);
   }
   onBlur(e){
