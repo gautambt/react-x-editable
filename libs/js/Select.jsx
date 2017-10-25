@@ -17,14 +17,10 @@ export default class Select extends Component {
     return options;
   }
   getValue = () =>{
-    const option = _.find(this.state.options, {'text' : this.state.value});
-    if(option)  return option['value']
+    return this.state.value;
   }
   setValue = (e) =>{
-    const option = _.find(this.state.options, (option) => {
-      return option.value ==  e.target.value;
-    });
-    this.setState({ value: option.text });
+    this.setState({ value: e.target.value });
     this.props.setValueToAnchor(e.target.value, e);
   }
   onBlur(e){
