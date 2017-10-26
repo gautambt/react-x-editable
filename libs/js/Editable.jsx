@@ -228,7 +228,7 @@ export default class Editable extends Component {
                   onClick={this.setEditable.bind(this, true)}
                   href="javascript:;"
                 >
-                  { this.getValueForAnchor() || 'empty' }
+                  { this.getValueForAnchor() }
                 </a>
               )
             : null
