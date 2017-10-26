@@ -118,20 +118,18 @@ export default class Editable extends Component {
       }
     }
 
-    if(value){
-      if(this.props.display){
-        return this.props.display(value);
-      } else if(this.props.seperator && _.isArray(value)){
-        return _.join(value, this.props.seperator);
-      }else if(_.isArray(value)){
-        return _.join(value, ',');
-      }else if(_.isObject(value)){
-        let tmp = '';
-        _.forOwn(value, function(value, key) {
-          tmp += key +":"+ value +" ";
-        } );
-        return tmp;
-      }
+    if(this.props.display){
+      return this.props.display(value);
+    } else if(this.props.seperator && _.isArray(value)){
+      return _.join(value, this.props.seperator);
+    }else if(_.isArray(value)){
+      return _.join(value, ',');
+    }else if(_.isObject(value)){
+      let tmp = '';
+      _.forOwn(value, function(value, key) {
+        tmp += key +":"+ value +" ";
+      } );
+      return tmp;
     }
 
     return value;
